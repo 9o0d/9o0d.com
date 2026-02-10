@@ -672,57 +672,82 @@ body.page-loaded {
         min-height: calc(120vh - 110px);
     }
     
-    /* 隐藏手机版所有内容，只显示提示信息 */
-    .glass-nav,
-    .hero-section,
-    .content-section,
-    .software-section,
+    /* 手机版隐藏所有内容，只显示提示信息 */
+    .main-content,
     .glass-footer {
         display: none !important;
     }
     
-    /* 手机版提示信息样式 */
-    .mobile-notice {
+    .mobile-message {
         display: flex !important;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        background: linear-gradient(135deg, 
-            rgba(255, 255, 255, 0.95) 0%, 
-            rgba(230, 240, 255, 0.9) 25%, 
-            rgba(209, 227, 255, 0.85) 50%, 
-            rgba(184, 212, 255, 0.8) 75%, 
-            rgba(160, 198, 255, 0.75) 100%
-        );
-        backdrop-filter: blur(40px) saturate(200%);
-        padding: 2rem;
     }
     
-    .notice-content {
+    /* 手机版提示信息样式 */
+.mobile-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e3e8f0 100%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+/* 桌面端隐藏手机提示 */
+@media (min-width: 769px) {
+    .mobile-message {
+        display: none !important;
+    }
+}
+    
+    .message-content {
         text-align: center;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(30px);
+        border-radius: 24px;
+        padding: 40px 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         max-width: 400px;
+        width: 100%;
     }
     
-    .notice-icon {
+    .message-icon {
         font-size: 4rem;
         color: #0078d4;
-        margin-bottom: 1.5rem;
-        opacity: 0.8;
+        margin-bottom: 20px;
+        display: block;
     }
     
-    .notice-title {
+    .message-title {
         font-size: 1.8rem;
-        font-weight: 600;
+        font-weight: 700;
         color: #1a1a1a;
-        margin-bottom: 1rem;
+        margin-bottom: 15px;
         line-height: 1.3;
     }
     
-    .notice-text {
+    .message-text {
         font-size: 1.1rem;
         color: #666;
-        line-height: 1.5;
-        opacity: 0.9;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+    
+    .message-actions {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .message-actions .win10-btn {
+        min-width: 200px;
+        padding: 14px 24px;
+        font-size: 1.1rem;
+        font-weight: 600;
     }
     
     /* 导航栏手机版 */

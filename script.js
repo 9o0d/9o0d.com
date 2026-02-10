@@ -1,3 +1,24 @@
+// 移动端检测
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+            window.innerWidth <= 768;
+}
+
+// 控制移动端提示显示
+function toggleMobileNotice() {
+    if (isMobileDevice()) {
+    } else {
+        document.getElementById('mobile-notice').innerHTML = '';
+    }
+}
+
+// 页面加载时执行移动端检测
+document.addEventListener('DOMContentLoaded', function() {
+    toggleMobileNotice();
+    
+    // 监听窗口大小变化，适应响应式设计
+    window.addEventListener('resize', toggleMobileNotice);
+});
 // 软件数据
 const softwareData = [
     {
