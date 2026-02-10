@@ -669,7 +669,60 @@ body.page-loaded {
     
     .main-content {
         padding: 70px 16px 40px;
-        min-height: calc(100vh - 110px);
+        min-height: calc(120vh - 110px);
+    }
+    
+    /* 隐藏手机版所有内容，只显示提示信息 */
+    .glass-nav,
+    .hero-section,
+    .content-section,
+    .software-section,
+    .glass-footer {
+        display: none !important;
+    }
+    
+    /* 手机版提示信息样式 */
+    .mobile-notice {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.95) 0%, 
+            rgba(230, 240, 255, 0.9) 25%, 
+            rgba(209, 227, 255, 0.85) 50%, 
+            rgba(184, 212, 255, 0.8) 75%, 
+            rgba(160, 198, 255, 0.75) 100%
+        );
+        backdrop-filter: blur(40px) saturate(200%);
+        padding: 2rem;
+    }
+    
+    .notice-content {
+        text-align: center;
+        max-width: 400px;
+    }
+    
+    .notice-icon {
+        font-size: 4rem;
+        color: #0078d4;
+        margin-bottom: 1.5rem;
+        opacity: 0.8;
+    }
+    
+    .notice-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+    
+    .notice-text {
+        font-size: 1.1rem;
+        color: #666;
+        line-height: 1.5;
+        opacity: 0.9;
     }
     
     /* 导航栏手机版 */
@@ -752,8 +805,8 @@ body.page-loaded {
     
     /* 主横幅手机版 */
     .hero-section {
-        height: 75vh;
-        min-height: 520px;
+        height: 120vh;
+        min-height: 800px;
         padding: 3rem 16px 2rem;
         justify-content: flex-start;
         padding-top: 4rem;
