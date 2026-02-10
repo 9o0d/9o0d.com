@@ -1,4 +1,115 @@
-<html>
-  <title>9o0d</title>
-  <body>9o0d</body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9o0d - 软件合集下载中心</title>
+    <link rel="stylesheet" href="styles2.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">9o0d</a>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">首页</a>
+                <a href="#categories" class="nav-link">分类</a>
+                <a href="#popular" class="nav-link">热门</a>
+                <a href="#new" class="nav-link">最新</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">9o0d</h1>
+                <p class="hero-subtitle">软件合集下载中心 - 质优而廉价的解决方案</p>
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="搜索软件名称..." class="search-input">
+                        <button id="searchBtn" class="win10-btn primary">搜索</button>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <a href="#categories" class="win10-btn primary">
+                        <span>浏览分类</span>
+                    </a>
+                    <a href="#popular" class="win10-btn secondary">
+                        <span>热门下载</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="categories">
+            <div class="section-container">
+                <h2 class="section-title">软件分类</h2>
+                <div class="category-tabs">
+                    <button class="category-tab active" data-category="all">
+                        <i class="fas fa-th"></i>
+                        <span>全部产品</span>
+                    </button>
+                    <button class="category-tab" data-category="system">
+                        <i class="fas fa-cog"></i>
+                        <span>系统工具</span>
+                    </button>
+                    <button class="category-tab" data-category="design">
+                        <i class="fas fa-palette"></i>
+                        <span>设计工具</span>
+                    </button>
+                    <button class="category-tab" data-category="media">
+                        <i class="fas fa-film"></i>
+                        <span>媒体工具</span>
+                    </button>
+                    <button class="category-tab" data-category="others">
+                        <i class="fas fa-ellipsis-h"></i>
+                        <span>其他工具</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="software-section">
+            <div class="section-container">
+                <div class="software-grid" id="softwareGrid">
+                    <!-- 软件卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="popular">
+            <div class="section-container">
+                <h2 class="section-title">热门下载</h2>
+                <div class="popular-grid" id="popularGrid">
+                    <!-- 热门软件将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="new">
+            <div class="section-container">
+                <h2 class="section-title">最新软件</h2>
+                <div class="new-grid" id="newGrid">
+                    <!-- 最新软件将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy;2023-2025 Wu Mingle. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
 </html>
