@@ -123,21 +123,29 @@ const softwareData = [
 ];
 
 // DOM 元素
-const nav = document.querySelector('.glass-nav');
-const navLinks = document.querySelectorAll('.nav-link');
-const menuToggle = document.querySelector('.menu-toggle');
-const searchInput = document.getElementById('searchInput');
-const searchBtn = document.getElementById('searchBtn');
-const categoryTabs = document.querySelectorAll('.category-tab');
-const softwareGrid = document.getElementById('softwareGrid');
-const popularGrid = document.getElementById('popularGrid');
-const newGrid = document.getElementById('newGrid');
+let nav, navLinks, menuToggle, searchInput, searchBtn, categoryTabs, softwareGrid, popularGrid, newGrid;
 
 // 当前选中的分类
 let currentCategory = 'all';
 
+// 初始化DOM元素
+function initDOMElements() {
+    nav = document.querySelector('.glass-nav');
+    navLinks = document.querySelectorAll('.nav-link');
+    menuToggle = document.querySelector('.menu-toggle');
+    searchInput = document.getElementById('searchInput');
+    searchBtn = document.getElementById('searchBtn');
+    categoryTabs = document.querySelectorAll('.category-tab');
+    softwareGrid = document.getElementById('softwareGrid');
+    popularGrid = document.getElementById('popularGrid');
+    newGrid = document.getElementById('newGrid');
+}
+
 // 初始化页面
 document.addEventListener('DOMContentLoaded', function() {
+    // 初始化DOM元素
+    initDOMElements();
+    
     // 页面加载动画
     setTimeout(() => {
         document.body.classList.add('page-loaded');
@@ -163,34 +171,46 @@ document.addEventListener('DOMContentLoaded', function() {
 // 初始化事件监听器
 function initEventListeners() {
     // 导航菜单切换
-    menuToggle.addEventListener('click', toggleMobileMenu);
+    if (menuToggle) {
+        menuToggle.addEventListener('click', toggleMobileMenu);
+    }
 
     // 导航链接点击
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            scrollToSection(targetId);
-            setActiveNavLink(this);
+    if (navLinks && navLinks.length > 0) {
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                scrollToSection(targetId);
+                setActiveNavLink(this);
+            });
         });
-    });
+    }
 
     // 分类标签点击
-    categoryTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            const category = this.getAttribute('data-category');
-            setActiveCategoryTab(this, category);
-            filterSoftwareByCategory(category);
+    if (categoryTabs && categoryTabs.length > 0) {
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                console.log('分类按钮被点击:', this);
+                const category = this.getAttribute('data-category');
+                console.log('选中的分类:', category);
+                setActiveCategoryTab(this, category);
+                filterSoftwareByCategory(category);
+            });
         });
-    });
+    }
 
     // 搜索功能
-    searchBtn.addEventListener('click', handleSearch);
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            handleSearch();
-        }
-    });
+    if (searchBtn) {
+        searchBtn.addEventListener('click', handleSearch);
+    }
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+    }
 
     // 窗口大小变化监听
     window.addEventListener('resize', handleResize);
@@ -257,11 +277,27 @@ function setActiveCategoryTab(activeTab, category) {
 
 // 根据分类筛选软件
 function filterSoftwareByCategory(category) {
+    console.log('开始筛选分类:', category);
+    console.log('软件数据总数:', softwareData.length);
+    
     const filteredSoftware = category === 'all' 
         ? softwareData 
         : softwareData.filter(software => software.category === category);
     
-    renderSoftwareGrid(filteredSoftware);
+    console.log('筛选后的软件数量:', filteredSoftware.length);
+    
+    // 清空软件网格
+    softwareGrid.innerHTML = '';
+    console.log('软件网格已清空');
+    
+    // 重新渲染筛选后的软件
+    filteredSoftware.forEach(software => {
+        const softwareCard = createSoftwareCard(software);
+        softwareGrid.appendChild(softwareCard);
+        console.log('添加软件卡片:', software.name);
+    });
+    
+    console.log('筛选完成，软件网格中的卡片数量:', softwareGrid.children.length);
     
     // 筛选后立即触发新卡片的动画
     setTimeout(() => {
@@ -520,5 +556,4 @@ style.textContent = `
         }
     }
 `;
-
 document.head.appendChild(style);
