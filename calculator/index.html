@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大数计算器 - 9o0d</title>
+    <link rel="stylesheet" href="../styles2.css">
+    <link rel="icon" href="../Favicon512.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../Favicon512.ico" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 计算器专用样式 */
+        .calculator-container {
+            max-width: 500px;
+            margin: 80px auto 30px;
+            padding: 0 1.5rem;
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calculator-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0078d4 25%, #00b7c3 50%, #0078d4 75%, #1a1a1a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 4px 20px rgba(0, 120, 212, 0.15);
+        }
+
+        .calculator-subtitle {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .calculator-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.95) 0%, 
+                rgba(240, 248, 255, 0.9) 100%
+            );
+            backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 6px 24px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .display-container {
+            margin-bottom: 1rem;
+        }
+
+        .calculator-display {
+            background: rgba(0, 0, 0, 0.05);
+            border: 2px solid rgba(0, 120, 212, 0.2);
+            border-radius: 10px;
+            padding: 0.8rem 1.2rem;
+            font-size: 1.6rem;
+            font-family: 'Courier New', monospace;
+            text-align: right;
+            min-height: 50px;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            line-height: 1.3;
+            transition: all 0.3s ease;
+            margin-bottom: 0.3rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 120, 212, 0.3) transparent;
+        }
+        
+        .calculator-display::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .calculator-display::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 3px;
+        }
+        
+        .calculator-display::-webkit-scrollbar-thumb {
+            background: rgba(0, 120, 212, 0.3);
+            border-radius: 3px;
+        }
+        
+        .calculator-display::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 120, 212, 0.5);
+        }
+
+        .expression-display {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+            text-align: right;
+            min-height: 25px;
+            color: #666;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            line-height: 1.3;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
+        
+        .expression-display::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .expression-display::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 2px;
+        }
+        
+        .expression-display::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+        
+        .expression-display::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+        }
+
+        .calc-btn {
+            background: #f0f4f8;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 6px;
+            padding: 0.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calc-btn:hover {
+            background: #e3e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .calc-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .calc-btn.number {
+            background: #ffffff;
+            font-weight: 500;
+        }
+
+        .calc-btn.number:hover {
+            background: #f8fafc;
+        }
+
+        .calc-btn.operation {
+            background: #0078d4;
+            color: white;
+        }
+
+        .calc-btn.operation:hover {
+            background: #106ebe;
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+        }
+
+        .calc-btn.equals {
+            background: #00b7c3;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .calc-btn.equals:hover {
+            background: #00a0b0;
+            box-shadow: 0 4px 12px rgba(0, 183, 195, 0.3);
+        }
+
+        .calc-btn.clear {
+            background: #d13438;
+            color: white;
+        }
+
+        .calc-btn.clear:hover {
+            background: #c12a2e;
+            box-shadow: 0 4px 12px rgba(209, 52, 56, 0.3);
+        }
+
+        .calc-btn.zero {
+            grid-column: span 2;
+        }
+
+
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                margin: 40px auto 15px;
+                padding: 0 1rem;
+                max-width: 100%;
+                width: 95%;
+            }
+
+            .calculator-title {
+                font-size: 1.6rem;
+            }
+
+            .calculator-subtitle {
+                font-size: 0.8rem;
+            }
+
+            .calculator-card {
+                padding: 1rem;
+            }
+
+            .calculator-display {
+                font-size: 1.3rem;
+                min-height: 40px;
+                padding: 0.6rem 1rem;
+            }
+
+            .expression-display {
+                font-size: 0.8rem;
+                min-height: 20px;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .calculator-grid {
+                gap: 0.5rem;
+            }
+
+            .calc-btn {
+                font-size: 0.9rem;
+                padding: 0.6rem;
+                min-height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calculator-container {
+                max-width: 100%;
+                width: 95%;
+                margin: 20px auto 10px;
+            }
+
+            .calculator-title {
+                font-size: 1.4rem;
+            }
+
+            .calculator-subtitle {
+                font-size: 0.75rem;
+            }
+
+            .calculator-card {
+                padding: 0.8rem;
+            }
+
+            .calculator-display {
+                font-size: 1.1rem;
+                min-height: 35px;
+                padding: 0.5rem 0.8rem;
+            }
+
+            .expression-display {
+                font-size: 0.7rem;
+                min-height: 18px;
+                padding: 0.2rem 0.5rem;
+            }
+
+            .calculator-grid {
+                gap: 0.4rem;
+            }
+
+            .calc-btn {
+                font-size: 0.8rem;
+                padding: 0.5rem;
+                min-height: 35px;
+            }
+        }
+    </style>
+</head>
+<body class="calculator-page">
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">9o0d</a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">首页</a>
+                <a href="#" class="nav-link active">大数计算器</a>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <main class="main-content">
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1 class="calculator-title">&nbsp</h1><!----别改这里----->
+            </div>
+
+            <div class="calculator-card">
+                <div class="display-container">
+                    <div class="expression-display" id="expression">0</div>
+                    <div class="calculator-display" id="display">0</div>
+                </div>
+
+                <div class="calculator-grid">
+                    <!-- 第一行 -->
+                    <button class="calc-btn clear" data-action="clear">C</button>
+                    <button class="calc-btn clear" data-action="clear-entry">CE</button>
+                    <button class="calc-btn operation" data-action="backspace">⌫</button>
+                    <button class="calc-btn operation" data-action="divide">÷</button>
+
+                    <!-- 第二行 -->
+                    <button class="calc-btn number" data-number="7">7</button>
+                    <button class="calc-btn number" data-number="8">8</button>
+                    <button class="calc-btn number" data-number="9">9</button>
+                    <button class="calc-btn operation" data-action="multiply">×</button>
+
+                    <!-- 第三行 -->
+                    <button class="calc-btn number" data-number="4">4</button>
+                    <button class="calc-btn number" data-number="5">5</button>
+                    <button class="calc-btn number" data-number="6">6</button>
+                    <button class="calc-btn operation" data-action="subtract">-</button>
+
+                    <!-- 第四行 -->
+                    <button class="calc-btn number" data-number="1">1</button>
+                    <button class="calc-btn number" data-number="2">2</button>
+                    <button class="calc-btn number" data-number="3">3</button>
+                    <button class="calc-btn operation" data-action="add">+</button>
+
+                    <!-- 第五行 -->
+                    <button class="calc-btn number zero" data-number="0">0</button>
+                    <button class="calc-btn number" data-action="decimal">.</button>
+                    <button class="calc-btn operation" data-action="power">x^y</button>
+                    <button class="calc-btn equals" data-action="equals">=</button>
+                </div>
+            </div>
+        </div><p class="footer-copyright">&copy;2023-2025 Wu Mingle. All rights reserved.</p>
+    </main>
+
+
+    <script>
+        class BigNumberCalculator {
+            constructor() {
+                this.display = document.getElementById('display');
+                this.expressionDisplay = document.getElementById('expression');
+                this.currentInput = '0';
+                this.previousInput = '0';
+                this.operator = null;
+                this.waitingForNewInput = false;
+                
+                this.initEventListeners();
+            }
+
+            initEventListeners() {
+                // 数字按钮事件
+                document.querySelectorAll('[data-number]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.inputNumber(e.target.dataset.number);
+                    });
+                });
+
+                // 操作按钮事件
+                document.querySelectorAll('[data-action]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const action = e.target.dataset.action;
+                        this.handleAction(action);
+                    });
+                });
+
+                // 键盘支持
+                document.addEventListener('keydown', (e) => {
+                    this.handleKeyboard(e);
+                });
+            }
+
+            inputNumber(number) {
+                if (this.waitingForNewInput) {
+                    this.currentInput = number;
+                    this.waitingForNewInput = false;
+                } else {
+                    this.currentInput = this.currentInput === '0' ? number : this.currentInput + number;
+                }
+                this.updateDisplay();
+            }
+
+            handleAction(action) {
+                switch(action) {
+                    case 'clear':
+                        this.clear();
+                        break;
+                    case 'clear-entry':
+                        this.clearEntry();
+                        break;
+                    case 'backspace':
+                        this.backspace();
+                        break;
+                    case 'decimal':
+                        this.inputDecimal();
+                        break;
+                    case 'add':
+                    case 'subtract':
+                    case 'multiply':
+                    case 'divide':
+                    case 'power':
+                        this.setOperator(action);
+                        break;
+                    case 'equals':
+                        this.calculate();
+                        break;
+                }
+            }
+
+            clear() {
+                this.currentInput = '0';
+                this.previousInput = '0';
+                this.operator = null;
+                this.waitingForNewInput = false;
+                this.updateDisplay();
+            }
+
+            clearEntry() {
+                this.currentInput = '0';
+                this.updateDisplay();
+            }
+
+            backspace() {
+                if (this.currentInput.length > 1) {
+                    this.currentInput = this.currentInput.slice(0, -1);
+                } else {
+                    this.currentInput = '0';
+                }
+                this.updateDisplay();
+            }
+
+            inputDecimal() {
+                if (this.waitingForNewInput) {
+                    this.currentInput = '0.';
+                    this.waitingForNewInput = false;
+                } else if (this.currentInput.indexOf('.') === -1) {
+                    this.currentInput += '.';
+                }
+                this.updateDisplay();
+            }
+
+            setOperator(newOperator) {
+                if (this.operator && !this.waitingForNewInput) {
+                    this.calculate();
+                }
+
+                this.previousInput = this.currentInput;
+                this.operator = newOperator;
+                this.waitingForNewInput = true;
+                this.updateDisplay();
+            }
+
+            updateDisplay() {
+                this.display.textContent = this.currentInput;
+                
+                let expression = '';
+                if (this.operator) {
+                    const operatorSymbol = this.getOperatorSymbol(this.operator);
+                    expression = `${this.previousInput} ${operatorSymbol}`;
+                }
+                this.expressionDisplay.textContent = expression;
+            }
+
+            getOperatorSymbol(operator) {
+                switch(operator) {
+                    case 'add': return '+';
+                    case 'subtract': return '-';
+                    case 'multiply': return '×';
+                    case 'divide': return '÷';
+                    case 'power': return '^';
+                    default: return '';
+                }
+            }
+
+            calculate() {
+                if (!this.operator || this.waitingForNewInput) {
+                    return;
+                }
+
+                try {
+                    const prev = this.previousInput;
+                    const current = this.currentInput;
+                    
+                    let result;
+                    
+                    switch(this.operator) {
+                        case 'add':
+                            result = this.add(prev, current);
+                            break;
+                        case 'subtract':
+                            result = this.subtract(prev, current);
+                            break;
+                        case 'multiply':
+                            result = this.multiply(prev, current);
+                            break;
+                        case 'divide':
+                            result = this.divide(prev, current);
+                            break;
+                        case 'power':
+                            result = this.power(prev, current);
+                            break;
+                        default:
+                            throw new Error('未知的操作类型');
+                    }
+
+                    this.currentInput = result;
+                    this.previousInput = '0';
+                    this.operator = null;
+                    this.waitingForNewInput = true;
+                    this.updateDisplay();
+
+                } catch (error) {
+                    this.display.textContent = '错误: ' + error.message;
+                    this.expressionDisplay.textContent = '';
+                    this.currentInput = '0';
+                    this.previousInput = '0';
+                    this.operator = null;
+                    this.waitingForNewInput = true;
+                }
+            }
+
+            handleKeyboard(e) {
+                if (e.key >= '0' && e.key <= '9') {
+                    this.inputNumber(e.key);
+                } else if (e.key === '.') {
+                    this.inputDecimal();
+                } else if (e.key === '+') {
+                    this.setOperator('add');
+                } else if (e.key === '-') {
+                    this.setOperator('subtract');
+                } else if (e.key === '*') {
+                    this.setOperator('multiply');
+                } else if (e.key === '/') {
+                    e.preventDefault();
+                    this.setOperator('divide');
+                } else if (e.key === '^') {
+                    this.setOperator('power');
+                } else if (e.key === 'Enter' || e.key === '=') {
+                    this.calculate();
+                } else if (e.key === 'Escape' || e.key === 'Delete') {
+                    this.clear();
+                } else if (e.key === 'Backspace') {
+                    this.backspace();
+                }
+            }
+
+            // 大数运算方法
+            validateNumber(str) {
+                const cleanStr = str.replace(/[\s,]/g, '');
+                if (!/^-?\d*\.?\d+$/.test(cleanStr)) {
+                    throw new Error('请输入有效的数字');
+                }
+                return cleanStr;
+            }
+
+            add(a, b) {
+                a = this.validateNumber(a);
+                b = this.validateNumber(b);
+
+                const isANegative = a.startsWith('-');
+                const isBNegative = b.startsWith('-');
+                
+                if (isANegative && !isBNegative) {
+                    return this.subtract(b, a.substring(1));
+                }
+                if (!isANegative && isBNegative) {
+                    return this.subtract(a, b.substring(1));
+                }
+                if (isANegative && isBNegative) {
+                    return '-' + this.add(a.substring(1), b.substring(1));
+                }
+
+                const aParts = a.split('.');
+                const bParts = b.split('.');
+                
+                let integerA = aParts[0] || '0';
+                let integerB = bParts[0] || '0';
+                let decimalA = aParts[1] || '';
+                let decimalB = bParts[1] || '';
+
+                const maxDecimalLength = Math.max(decimalA.length, decimalB.length);
+                decimalA = decimalA.padEnd(maxDecimalLength, '0');
+                decimalB = decimalB.padEnd(maxDecimalLength, '0');
+
+                const numA = integerA + decimalA;
+                const numB = integerB + decimalB;
+
+                const maxLength = Math.max(numA.length, numB.length);
+                const paddedA = numA.padStart(maxLength, '0');
+                const paddedB = numB.padStart(maxLength, '0');
+
+                let carry = 0;
+                let result = '';
+
+                for (let i = maxLength - 1; i >= 0; i--) {
+                    const digitA = parseInt(paddedA[i] || '0');
+                    const digitB = parseInt(paddedB[i] || '0');
+                    const sum = digitA + digitB + carry;
+                    
+                    carry = Math.floor(sum / 10);
+                    result = (sum % 10) + result;
+                }
+
+                if (carry > 0) {
+                    result = carry + result;
+                }
+
+                if (maxDecimalLength > 0) {
+                    const integerPart = result.slice(0, -maxDecimalLength) || '0';
+                    const decimalPart = result.slice(-maxDecimalLength);
+                    result = integerPart + '.' + decimalPart;
+                }
+
+                return this.removeLeadingZeros(result);
+            }
+
+            subtract(a, b) {
+                a = this.validateNumber(a);
+                b = this.validateNumber(b);
+
+                const isANegative = a.startsWith('-');
+                const isBNegative = b.startsWith('-');
+                
+                if (isANegative && !isBNegative) {
+                    return '-' + this.add(a.substring(1), b);
+                }
+                if (!isANegative && isBNegative) {
+                    return this.add(a, b.substring(1));
+                }
+                if (isANegative && isBNegative) {
+                    return this.subtract(b.substring(1), a.substring(1));
+                }
+
+                const aParts = a.split('.');
+                const bParts = b.split('.');
+                
+                let integerA = aParts[0] || '0';
+                let integerB = bParts[0] || '0';
+                let decimalA = aParts[1] || '';
+                let decimalB = bParts[1] || '';
+
+                const maxDecimalLength = Math.max(decimalA.length, decimalB.length);
+                decimalA = decimalA.padEnd(maxDecimalLength, '0');
+                decimalB = decimalB.padEnd(maxDecimalLength, '0');
+
+                const numA = integerA + decimalA;
+                const numB = integerB + decimalB;
+
+                let isNegative = false;
+                let compareA = numA;
+                let compareB = numB;
+                
+                if (compareA.length !== compareB.length) {
+                    isNegative = compareA.length < compareB.length;
+                } else {
+                    for (let i = 0; i < compareA.length; i++) {
+                        if (compareA[i] !== compareB[i]) {
+                            isNegative = compareA[i] < compareB[i];
+                            break;
+                        }
+                    }
+                }
+
+                if (isNegative) {
+                    [numA, numB] = [numB, numA];
+                }
+
+                const maxLength = Math.max(numA.length, numB.length);
+                const paddedA = numA.padStart(maxLength, '0');
+                const paddedB = numB.padStart(maxLength, '0');
+
+                let borrow = 0;
+                let result = '';
+
+                for (let i = maxLength - 1; i >= 0; i--) {
+                    let digitA = parseInt(paddedA[i]);
+                    let digitB = parseInt(paddedB[i]);
+                    
+                    digitA -= borrow;
+                    
+                    if (digitA < digitB) {
+                        digitA += 10;
+                        borrow = 1;
+                    } else {
+                        borrow = 0;
+                    }
+                    
+                    result = (digitA - digitB) + result;
+                }
+
+                if (maxDecimalLength > 0) {
+                    const integerPart = result.slice(0, -maxDecimalLength) || '0';
+                    const decimalPart = result.slice(-maxDecimalLength);
+                    result = integerPart + '.' + decimalPart;
+                }
+
+                result = this.removeLeadingZeros(result);
+                
+                if (isNegative) {
+                    result = '-' + result;
+                }
+
+                return result === '' ? '0' : result;
+            }
+
+            multiply(a, b) {
+                a = this.validateNumber(a);
+                b = this.validateNumber(b);
+
+                const isANegative = a.startsWith('-');
+                const isBNegative = b.startsWith('-');
+                const isResultNegative = isANegative !== isBNegative;
+
+                a = isANegative ? a.substring(1) : a;
+                b = isBNegative ? b.substring(1) : b;
+
+                const aParts = a.split('.');
+                const bParts = b.split('.');
+                
+                let integerA = aParts[0] || '0';
+                let integerB = bParts[0] || '0';
+                let decimalA = aParts[1] || '';
+                let decimalB = bParts[1] || '';
+
+                const totalDecimalPlaces = decimalA.length + decimalB.length;
+                
+                const numA = integerA + decimalA;
+                const numB = integerB + decimalB;
+
+                const result = Array(numA.length + numB.length).fill(0);
+
+                for (let i = numA.length - 1; i >= 0; i--) {
+                    for (let j = numB.length - 1; j >= 0; j--) {
+                        const product = parseInt(numA[i]) * parseInt(numB[j]);
+                        const sum = result[i + j + 1] + product;
+                        
+                        result[i + j + 1] = sum % 10;
+                        result[i + j] += Math.floor(sum / 10);
+                    }
+                }
+
+                let resultStr = result.join('').replace(/^0+(?=\d)/, '');
+                if (resultStr === '') resultStr = '0';
+
+                if (totalDecimalPlaces > 0) {
+                    if (resultStr.length <= totalDecimalPlaces) {
+                        resultStr = resultStr.padStart(totalDecimalPlaces + 1, '0');
+                    }
+                    const integerPart = resultStr.slice(0, -totalDecimalPlaces) || '0';
+                    const decimalPart = resultStr.slice(-totalDecimalPlaces);
+                    resultStr = integerPart + '.' + decimalPart;
+                }
+
+                resultStr = this.removeLeadingZeros(resultStr);
+                
+                if (isResultNegative && resultStr !== '0') {
+                    resultStr = '-' + resultStr;
+                }
+
+                return resultStr;
+            }
+
+            divide(a, b) {
+                a = this.validateNumber(a);
+                b = this.validateNumber(b);
+
+                if (b === '0') {
+                    throw new Error('除数不能为零');
+                }
+
+                const isANegative = a.startsWith('-');
+                const isBNegative = b.startsWith('-');
+                const isResultNegative = isANegative !== isBNegative;
+
+                a = isANegative ? a.substring(1) : a;
+                b = isBNegative ? b.substring(1) : b;
+
+                let quotient = '';
+                let current = '';
+
+                for (let i = 0; i < a.length; i++) {
+                    current += a[i];
+                    current = this.removeLeadingZeros(current);
+                    
+                    if (this.compare(current, b) < 0) {
+                        quotient += '0';
+                        continue;
+                    }
+
+                    let count = 0;
+                    let temp = current;
+                    
+                    while (this.compare(temp, b) >= 0) {
+                        temp = this.subtract(temp, b);
+                        count++;
+                    }
+                    
+                    quotient += count.toString();
+                    current = temp;
+                }
+
+                quotient = this.removeLeadingZeros(quotient) || '0';
+                
+                if (isResultNegative && quotient !== '0') {
+                    quotient = '-' + quotient;
+                }
+
+                return quotient;
+            }
+
+            power(base, exponent) {
+                base = this.validateNumber(base);
+                exponent = this.validateNumber(exponent);
+
+                if (exponent.includes('.') || exponent.includes('-')) {
+                    throw new Error('次方运算只支持非负整数指数');
+                }
+
+                if (exponent === '0') return '1';
+                if (exponent === '1') return base;
+                if (base === '0') return '0';
+                if (base === '1') return '1';
+
+                let result = '1';
+                let currentBase = base;
+                let currentExponent = exponent;
+
+                while (this.compare(currentExponent, '0') > 0) {
+                    if (this.isOdd(currentExponent)) {
+                        result = this.multiply(result, currentBase);
+                    }
+                    
+                    currentExponent = this.divideByTwo(currentExponent);
+                    
+                    if (this.compare(currentExponent, '0') > 0) {
+                        currentBase = this.multiply(currentBase, currentBase);
+                    }
+                }
+
+                return result;
+            }
+
+            isOdd(num) {
+                const lastDigit = num[num.length - 1];
+                return ['1', '3', '5', '7', '9'].includes(lastDigit);
+            }
+
+            divideByTwo(num) {
+                let result = '';
+                let carry = 0;
+
+                for (let i = 0; i < num.length; i++) {
+                    const currentDigit = parseInt(num[i]) + carry * 10;
+                    const quotient = Math.floor(currentDigit / 2);
+                    carry = currentDigit % 2;
+                    
+                    if (result !== '' || quotient > 0) {
+                        result += quotient.toString();
+                    }
+                }
+
+                return result === '' ? '0' : result;
+            }
+
+            compare(a, b) {
+                a = this.removeLeadingZeros(a);
+                b = this.removeLeadingZeros(b);
+
+                if (a.length > b.length) return 1;
+                if (a.length < b.length) return -1;
+
+                for (let i = 0; i < a.length; i++) {
+                    if (a[i] > b[i]) return 1;
+                    if (a[i] < b[i]) return -1;
+                }
+
+                return 0;
+            }
+
+            removeLeadingZeros(str) {
+                if (str.startsWith('-')) {
+                    const positivePart = str.substring(1);
+                    const cleaned = this.removeLeadingZeros(positivePart);
+                    return cleaned === '0' ? '0' : '-' + cleaned;
+                }
+
+                if (str.includes('.')) {
+                    const parts = str.split('.');
+                    const integerPart = parts[0].replace(/^0+(?=\d)/, '') || '0';
+                    let decimalPart = parts[1].replace(/0+$/, '');
+                    
+                    if (decimalPart === '') {
+                        return integerPart;
+                    }
+                    
+                    return integerPart + '.' + decimalPart;
+                }
+
+                return str.replace(/^0+(?=\d)/, '') || '0';
+            }
+        }
+
+        // 初始化计算器
+        document.addEventListener('DOMContentLoaded', () => {
+            new BigNumberCalculator();
+        });
+
+
+    </script>
+</body>
+</html>

@@ -673,12 +673,13 @@ body.page-loaded {
     }
     
     /* 手机版隐藏所有内容，只显示提示信息 */
-    .main-content,
+    /* 为计算器页面添加例外 */
+    body:not(.calculator-page) .main-content,
     .glass-footer {
         display: none !important;
     }
     
-    .mobile-message {
+    body:not(.calculator-page) .mobile-message {
         display: flex !important;
     }
     
