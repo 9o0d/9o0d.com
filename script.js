@@ -25,7 +25,7 @@ const softwareData = [
         id: 1,
         name: "9o0d 鼠标连点器",
         description: "简单易用的鼠标自动点击工具，支持自定义点击频率和位置",
-        version: "5.0.0.0",
+        version: "5.1.0.0",
         category: "system",
         icon: "fas fa-mouse-pointer",
         downloadUrl: "https://www.9o0d.top/9o0dMC/9o0dMC.exe",
