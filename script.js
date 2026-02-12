@@ -102,7 +102,7 @@ const softwareData = [
         id: 8,
         name: "9o0d Wallpaper",
         description: "一款动态壁纸软件，可将mp4文件设为桌面壁纸（下载需跳转到站外）",
-        version: "1.0.0.0",
+        version: "2.0.0.0",
         category: "others",
         icon: "fas fa-video",
         downloadUrl: "https://lestore.lenovo.com/detail/L117695",
