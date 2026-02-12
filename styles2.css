@@ -1530,6 +1530,16 @@ body.page-loaded {
     font-size: 0.9rem;
 }
 
+.footer-copyright a {
+    color: #999;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-copyright a:hover {
+    color: #0078d4;
+}
+
 /* 按钮样式修正 */
 .win10-btn.primary {
     background: #0078d4;

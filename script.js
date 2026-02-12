@@ -179,10 +179,15 @@ function initEventListeners() {
     if (navLinks && navLinks.length > 0) {
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
-                scrollToSection(targetId);
-                setActiveNavLink(this);
+                const href = this.getAttribute('href');
+                // 只对内部锚点链接阻止默认行为
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = href.substring(1);
+                    scrollToSection(targetId);
+                    setActiveNavLink(this);
+                }
+                // 外部链接（http/https）会正常跳转
             });
         });
     }
