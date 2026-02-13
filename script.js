@@ -117,6 +117,17 @@ const softwareData = [
         category: "others",
         icon: "fas fa-list",
         downloadUrl: "https://lestore.lenovo.com/detail/L120855",
+        isNew: false,
+        isPopular: false
+    },
+        {
+        id: 10,
+        name: "9o0d 大数计算器",
+        description: "大数计算器（点击下载即跳转至网页版入口）",
+        version: "1.0.0.0",
+        category: "others",
+        icon: "fas fa-list",
+        downloadUrl: "https://www.9o0d.com/calculator/",
         isNew: true,
         isPopular: false
     }
