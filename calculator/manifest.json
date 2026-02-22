@@ -1,25 +1,36 @@
 {
-  "name": "大数计算器",
-  "short_name": "计算器",
-  "description": "功能强大的大数计算器，支持复杂数学运算",
-  "start_url": "./",
-  "display": "standalone",
-  "theme_color": "#0078d4",
-  "background_color": "#ffffff",
-  "orientation": "portrait",
-  "scope": "./",
-  "lang": "zh-CN",
-  "icons": [
-    {
-      "src": "./Favicon512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "./Favicon192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ],
-  "categories": ["utilities", "productivity"]
+    "name": "大数计算器",
+    "short_name": "计算器",
+    "description": "功能强大的大数计算器，支持复杂数学运算",
+    "start_url": "./",
+    "display": "standalone",
+    "theme_color": "#0078d4",
+    "background_color": "#ffffff",
+    "orientation": "portrait",
+    "scope": "./",
+    "lang": "zh-CN",
+    "screenshots": [
+        {
+            "src": "sc.jpg",
+            "sizes": "1280x720",
+            "type": "image/jpg",
+            "platform": "wide"
+        }
+    ],
+    "icons": [
+        {
+            "src": "./Favicon512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "./Favicon192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "categories": [
+        "utilities",
+        "productivity"
+    ]
 }
