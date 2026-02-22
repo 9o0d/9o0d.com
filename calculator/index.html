@@ -3,12 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0078d4">
+    <meta name="description" content="功能强大的大数计算器，支持复杂数学运算">
+    <meta name="keywords" content="计算器,数学,大数计算,在线工具">
+    <meta name="author" content="9o0d">
+    
+    <!-- PWA配置 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="大数计算器">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#0078d4">
+    <meta name="msapplication-TileImage" content="../Favicon512.ico">
+    
     <title>大数计算器 - 9o0d</title>
     <link rel="stylesheet" href="../styles2.css">
     <link rel="icon" href="../Favicon512.ico" type="image/x-icon">
     <link rel="shortcut icon" href="../Favicon512.ico" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
     <style>
         /* 计算器专用样式 */
         .calculator-container {
@@ -931,6 +947,36 @@
         // 初始化计算器
         document.addEventListener('DOMContentLoaded', () => {
             new BigNumberCalculator();
+            
+            // 注册Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('Service Worker 注册成功:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker 注册失败:', error);
+                    });
+            }
+            
+            // 检测PWA安装提示
+            let deferredPrompt;
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // 可以在这里显示安装提示按钮
+                console.log('PWA安装提示可用');
+                
+                // 示例：显示安装按钮
+                // showInstallPromotion();
+            });
+            
+            window.addEventListener('appinstalled', () => {
+                console.log('PWA应用已安装');
+                deferredPrompt = null;
+            });
         });
 
 

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .warning { background: #fff3cd; color: #856404; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>PWA功能测试</h1>
+    
+    <div id="status">
+        <div class="status" id="manifestStatus">检查Manifest文件...</div>
+        <div class="status" id="swStatus">检查Service Worker...</div>
+        <div class="status" id="installStatus">检查安装功能...</div>
+    </div>
+
+    <script>
+        // 测试Manifest文件
+        if ('serviceWorker' in navigator) {
+            fetch('manifest.json')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('manifestStatus').textContent = '✓ Manifest文件加载成功';
+                        document.getElementById('manifestStatus').className = 'status success';
+                    } else {
+                        throw new Error('Manifest文件加载失败');
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('manifestStatus').textContent = '✗ ' + error.message;
+                    document.getElementById('manifestStatus').className = 'status error';
+                });
+        }
+
+        // 测试Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(registration => {
+                    document.getElementById('swStatus').textContent = '✓ Service Worker注册成功';
+                    document.getElementById('swStatus').className = 'status success';
+                })
+                .catch(error => {
+                    document.getElementById('swStatus').textContent = '✗ Service Worker注册失败: ' + error.message;
+                    document.getElementById('swStatus').className = 'status error';
+                });
+        } else {
+            document.getElementById('swStatus').textContent = '✗ 浏览器不支持Service Worker';
+            document.getElementById('swStatus').className = 'status error';
+        }
+
+        // 测试安装功能
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installStatus').textContent = '✓ PWA安装功能可用';
+            document.getElementById('installStatus').className = 'status success';
+            
+            // 显示安装按钮
+            const installButton = document.createElement('button');
+            installButton.textContent = '安装应用';
+            installButton.style.cssText = 'background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 0;';
+            installButton.onclick = () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('用户接受了安装提示');
+                    }
+                    deferredPrompt = null;
+                });
+            };
+            document.getElementById('installStatus').appendChild(installButton);
+        });
+
+        window.addEventListener('appinstalled', () => {
+            document.getElementById('installStatus').textContent = '✓ 应用已成功安装';
+            document.getElementById('installStatus').className = 'status success';
+        });
+
+        // 如果没有安装提示，检查是否已经安装
+        setTimeout(() => {
+            if (!deferredPrompt) {
+                if (window.matchMedia('(display-mode: standalone)').matches) {
+                    document.getElementById('installStatus').textContent = '✓ 应用已安装（独立模式运行）';
+                    document.getElementById('installStatus').className = 'status success';
+                } else {
+                    document.getElementById('installStatus').textContent = 'ℹ 安装提示尚未触发，可能需要用户交互';
+                    document.getElementById('installStatus').className = 'status info';
+                }
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
