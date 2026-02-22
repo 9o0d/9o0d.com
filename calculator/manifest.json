@@ -15,7 +15,7 @@
         {
             "src": "sc.jpg",
             "sizes": "1280x720",
-            "type": "image/jpg",
+            "type": "image/jpeg",
             "platform": "wide"
         }
     ],
