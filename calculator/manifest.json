@@ -7,6 +7,7 @@
     "display": "standalone",
     "theme_color": "#0078d4",
     "background_color": "#ffffff",
+    "prefer_related_applications": false,
     "orientation": "portrait",
     "scope": "./",
     "lang": "zh-CN",
